@@ -1,15 +1,19 @@
 import express from "express";
-import http from "http";
 import bodyParser from "body-parser";
-import cookieParser from "cookie-parser";
 import compression from "compression";
 import cors from "cors";
+import dotenv from "dotenv";
+import "express-async-errors";
+
+// error handler
+import notFoundMiddleware from "./middleware/not-found";
+import errorHandlerMiddleware from "./middleware/error-handler";
 
 const app = express();
+dotenv.config();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cookieParser());
 app.use(compression());
 app.use(
   cors({
@@ -18,9 +22,24 @@ app.use(
   })
 );
 
-const server = http.createServer(app);
+// routes
+app.get("/", (req, res) => {
+  res.send("jobs api");
+});
+
+app.use(notFoundMiddleware);
+app.use(errorHandlerMiddleware);
 
 const port = process.env.PORT || 5000;
-server.listen(port, () => {
-  console.log(`server running on http://localhost:${port}`);
-});
+
+const start = async () => {
+  try {
+    app.listen(port, () =>
+      console.log(`Server is listening on port ${port}...`)
+    );
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+start();
