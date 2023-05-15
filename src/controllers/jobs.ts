@@ -30,10 +30,36 @@ export const createJob = async (req: CustomRequest, res: Response) => {
   res.status(StatusCodes.CREATED).json({ job });
 };
 
-export const updateJob = async (req: Request, res: Response) => {
-  res.send("update job route");
+export const updateJob = async (req: CustomRequest, res: Response) => {
+  const { id: jobId } = req.params;
+  const { userId } = req.user as JwtPayload;
+
+  if (!req.body.company || !req.body.position) {
+    throw new BadRequestError("Please provide company and position");
+  }
+  const job = await Job.findOneAndUpdate(
+    {
+      _id: jobId,
+      createdBy: userId,
+    },
+    req.body,
+    { new: true, runValidators: true }
+  );
+  if (!job) {
+    throw new NotFoundError(`No job with id : ${jobId}`);
+  }
+  res.status(StatusCodes.OK).json({ job });
 };
 
-export const deleteJob = async (req: Request, res: Response) => {
-  res.send("delete job route");
+export const deleteJob = async (req: CustomRequest, res: Response) => {
+  const { id: jobId } = req.params;
+  const { userId } = req.user as JwtPayload;
+  const job = await Job.findOneAndDelete({
+    _id: jobId,
+    createdBy: userId,
+  });
+  if (!job) {
+    throw new NotFoundError(`No job with id : ${jobId}`);
+  }
+  res.status(StatusCodes.OK).json({ job });
 };

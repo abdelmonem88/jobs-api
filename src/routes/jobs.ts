@@ -13,7 +13,7 @@ const jobRoutes = Express.Router();
 jobRoutes.get("/", getJobs);
 jobRoutes.get("/:id", getJob);
 jobRoutes.post("/", createJob);
-jobRoutes.put("/:id", updateJob);
+jobRoutes.patch("/:id", updateJob);
 jobRoutes.delete("/:id", deleteJob);
 
 export default jobRoutes;
