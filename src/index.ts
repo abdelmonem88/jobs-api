@@ -3,8 +3,7 @@ import bodyParser from "body-parser";
 import compression from "compression";
 import cors from "cors";
 import dotenv from "dotenv";
-// import "express-async-errors";
-require("express-async-errors");
+import "express-async-errors";
 
 // error handler
 import notFoundMiddleware from "./middleware/not-found";
@@ -17,6 +16,7 @@ import authRoutes from "./routes/auth";
 // db
 import connectDB from "./db/connect";
 
+// middleware
 import authMiddleware from "./middleware/authentication";
 
 const app = express();
