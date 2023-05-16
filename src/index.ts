@@ -7,6 +7,8 @@ import cors from "cors";
 import helmet from "helmet";
 // import xss from "xss-clean";
 import rateLimit from "express-rate-limit";
+import swaggerUi from "swagger-ui-express";
+import YAML from "yamljs";
 
 // error handler
 import notFoundMiddleware from "./middleware/not-found";
@@ -44,8 +46,16 @@ app.use(
 app.use(helmet());
 // app.use(xss());
 
+// swagger
+const swaggerDocument = YAML.load("./swagger.yaml");
+
+app.get("/", (req, res) => {
+  res.send('<h1>Jobs API</h1><a href="/api-docs">Documentation</a>');
+});
+
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/jobs", authMiddleware, jobRoutes);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
