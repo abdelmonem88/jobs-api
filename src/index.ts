@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 import "express-async-errors";
 import cors from "cors";
 import helmet from "helmet";
-import xss from "xss-clean";
+// import xss from "xss-clean";
 import rateLimit from "express-rate-limit";
 
 // error handler
@@ -42,7 +42,7 @@ app.use(
   })
 );
 app.use(helmet());
-app.use(xss());
+// app.use(xss());
 
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/jobs", authMiddleware, jobRoutes);
