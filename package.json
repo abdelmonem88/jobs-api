@@ -2,9 +2,10 @@
   "name": "jobs-api",
   "version": "1.0.0",
   "description": "",
-  "main": "build/index.js",
+  "main": "index.js",
   "scripts": {
-    "start": "tsc && node build/index.js",
+    "build": "tsc",
+    "start": "node ./build/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
