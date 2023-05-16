@@ -1,9 +1,12 @@
 import express from "express";
 import bodyParser from "body-parser";
 import compression from "compression";
-import cors from "cors";
 import dotenv from "dotenv";
 import "express-async-errors";
+import cors from "cors";
+import helmet from "helmet";
+import xss from "xss-clean";
+import rateLimit from "express-rate-limit";
 
 // error handler
 import notFoundMiddleware from "./middleware/not-found";
@@ -22,6 +25,13 @@ import authMiddleware from "./middleware/authentication";
 const app = express();
 dotenv.config();
 
+app.set("trust proxy", 1);
+app.use(
+  rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+  })
+);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(compression());
@@ -31,6 +41,8 @@ app.use(
     credentials: true,
   })
 );
+app.use(helmet());
+app.use(xss());
 
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/jobs", authMiddleware, jobRoutes);

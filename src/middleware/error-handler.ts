@@ -1,4 +1,3 @@
-import { CustomAPIError } from "../errors";
 import { StatusCodes } from "http-status-codes";
 import { NextFunction, Request, Response } from "express";
 
